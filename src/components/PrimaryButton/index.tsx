@@ -4,17 +4,17 @@ import {theme} from '../../ui'
 
 
 interface props{
-    onPress?: () => void;
+      onPress?: () => void;
 
 }
 
 
 const Container = styled.TouchableOpacity({
-    width: 200,
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: theme.space[1],
-    paddingVertical: theme.space[2],
+    paddingVertical: theme.space[3],
     backgroundColor: theme.colors.primery100,
 });
   const Title= styled.Text({

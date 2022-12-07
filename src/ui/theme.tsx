@@ -3,9 +3,11 @@ import {Dimensions, Platform} from 'react-native';
 const colors = {
   white: '#ffffff',
   black: '#000000',
+  black10:'#867373', 
   green: '#0CCC83',
   primery100: '#00A884',
   red100: '#F16B6B',
+  blue: '#0C42CC'
 };
 
 const spacesFrom1 = Array.from({length: 64}, (_, i) => i + 1);
@@ -25,19 +27,9 @@ const fontWeights = {
 };
 
 const fontSize = {
-  buttonText: 18,
-  largeTitle: 32,
-  mediumTitle: 24,
-  xmediumTitle: 22,
-  smallTitle: 20,
-  largeText: 24,
-  xMediumText: 23,
-  mediumText: 20,
-  normalText: 18,
-  xnormalText: 17,
-  smallText: 16,
-  xsmallText: 15,
-  xxsmallText: 14,
+  title: 30,
+  small:13,
+  text: 15,
 };
 
 const paddings = {
