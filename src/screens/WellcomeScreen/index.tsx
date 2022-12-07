@@ -2,16 +2,15 @@ import React from 'react';
 import styled from 'styled-components/native';
 import {theme} from '../../ui'
 import PrimaryButton from '../../components/PrimaryButton';
-import { Alert } from 'react-native';
 import { Spacer } from '../../components/Spacer';
 
-
-
-const HeaderContainer = styled.SafeAreaView({
-    flex: 1,
+const MainContainer = styled.ScrollView({
+  flex:1,
+  paddingTop:'15%'
+});
+const HeaderContainer = styled.View({
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: '21%'
   });
 
   const WellcomeImage = styled.Image({
@@ -25,7 +24,6 @@ const HeaderContainer = styled.SafeAreaView({
   const Discreption = styled.Text({
     fontSize: theme.fontSize.small,
     textAlign: 'center',
-    paddingHorizontal: 11
   });
   const CompanyName= styled.Text({
 fontFamily: theme.fontFamilies.light,
@@ -38,7 +36,7 @@ color: theme.colors.black,
     color: theme.colors.black10,
       });
   const BottomContainer = styled.View({
-    flex: 1,
+    // flex: 1,
     alignItems: 'center',
     paddingHorizontal: 57
   });
@@ -47,33 +45,42 @@ color: theme.colors.black,
     alignItems: 'center',
     marginTop: '20%'
   });
-  const PrivacyBtn = styled.TouchableOpacity({
-    
-  })
+  const PrivacyBtn = styled.Text({
+    color: theme.colors.blue
+  });
+  const ConditionBtn = styled.Text({
+    color: theme.colors.blue
+  });
 
 const WellcomeScreen = () => {
   return (
-    <>
-    <HeaderContainer>
+    <MainContainer >
+    <HeaderContainer >
         <Title>Welcome to WhatsApp</Title>
 
-        <Spacer.Column numberOfSpaces={10} />
+                   <Spacer.Column numberOfSpaces={10} />
 
-        <WellcomeImage source={require('../../assets/images/wellcome_image.png')}/>
+    <WellcomeImage source={require('../../assets/images/wellcome_image.png')}/>
     </HeaderContainer>
+
+                    <Spacer.Column numberOfSpaces={14} />
+
     <BottomContainer>
-    <Discreption>Read our Privacy Policy. Tap “Agree and continue” to 
-                    accept the Teams of Service.
+    <Discreption numberOfLines={2}>Read our <PrivacyBtn>Privacy Policy</PrivacyBtn>. Tap “Agree and continue” to 
+                    accept the <ConditionBtn>Term of Condition </ConditionBtn>.
     </Discreption>
     <Spacer.Column numberOfSpaces={10} />
     <PrimaryButton/>
+
+                      {/* <Spacer.Column numberOfSpaces={29}/> */}
 
     <CompanyContainer>
       <FromText>from</FromText>
       <CompanyName>Facebook</CompanyName>
     </CompanyContainer>
     </BottomContainer>
-    </>
+    <Spacer.Column numberOfSpaces={15}/>
+    </MainContainer>
   )
 }
 
