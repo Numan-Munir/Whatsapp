@@ -3,11 +3,11 @@ import {Dimensions, Platform} from 'react-native';
 const colors = {
   white: '#ffffff',
   black: '#000000',
-  black10:'#867373', 
+  black10: '#867373',
   green: '#0CCC83',
   primery100: '#00A884',
   red100: '#F16B6B',
-  blue: '#0C42CC'
+  blue: '#0C42CC',
 };
 
 const spacesFrom1 = Array.from({length: 64}, (_, i) => i + 1);
@@ -28,7 +28,10 @@ const fontWeights = {
 
 const fontSize = {
   title: 30,
-  small:13,
+  smallTitle: 20,
+  mediumText: 14,
+  small: 13,
+  xsmall: 12,
   text: 15,
 };
 
