@@ -1,5 +1,7 @@
 #import "AppDelegate.h"
 
+
+#import "<Firebase.h>"
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
@@ -58,6 +60,10 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   return YES;
+
+  [FIRApp configure];
+
+
 }
 
 /// This method controls whether the `concurrentRoot`feature of React18 is turned on or off.
