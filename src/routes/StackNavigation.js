@@ -5,7 +5,8 @@ import SplashScreen from '../screens/SplashScreen';
 import Login from '../screens/Login';
 import Signup from '../screens/Signup';
 import WellcomeScreen from '../screens/WellcomeScreen';
-import CountryPickerDemo from '../screens/CountryPickerDemo';
+import OtpScreen from '../screens/OtpScreen';
+import OTPPractice from '../screens/OTPPractice';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,7 +19,8 @@ const StackNavigation = () => {
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Signup" component={Signup} />
       <Stack.Screen name="WellcomeScreen" component={WellcomeScreen} />
-      <Stack.Screen name="CountryPickerDemo" component={CountryPickerDemo} />
+      <Stack.Screen name="OtpScreen" component={OtpScreen} />
+      <Stack.Screen name="OTPPractice" component={OTPPractice} />
     </Stack.Navigator>
   );
 };

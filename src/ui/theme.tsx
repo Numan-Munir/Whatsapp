@@ -8,6 +8,8 @@ const colors = {
   primery100: '#00A884',
   red100: '#F16B6B',
   blue: '#0C42CC',
+  red10: '#F8DADAC7',
+  red300: '#DA1414',
 };
 
 const spacesFrom1 = Array.from({length: 64}, (_, i) => i + 1);
@@ -28,6 +30,8 @@ const fontWeights = {
 
 const fontSize = {
   title: 30,
+  mediumTitle: 24,
+  xmediumText: 18,
   smallTitle: 20,
   mediumText: 14,
   small: 13,
