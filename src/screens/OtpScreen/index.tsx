@@ -11,6 +11,10 @@ import {
 } from 'react-native-confirmation-code-field';
 import BlackButton from '../../components/BlackButton';
 import InvalidAlert from '../../components/InvalidAlert';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+import {MaterialIndicator} from 'react-native-indicators';
+import messaging from '@react-native-firebase/messaging';
 
 const Container = styled.View({
   flex: 1,
@@ -24,6 +28,7 @@ const HeaderContainer = styled.View({
   top: '6%',
   left: 24,
 });
+const Touch = styled.TouchableOpacity({});
 const BackIcon = styled.Image({});
 const HeaderTitle = styled.Text({
   flex: 1,
@@ -39,58 +44,105 @@ const BottomContainer = styled.View({
 const NumberText = styled.Text({
   fontFamily: theme.fontFamilies.text,
 });
+const LoaderContainer = styled.View({});
+const LoaderBG = styled.View({});
 
-const CELL_COUNT = 4;
+const CELL_COUNT = 6;
 
-const OtpScreen = () => {
-  const [value, setValue] = useState('');
+const OtpScreen = ({navigation, route}) => {
+  const {data, confirm} = route.params;
+  let uid = auth()?.currentUser?.uid;
+  const [loader, setLoader] = useState(false);
+  const [code, setCode] = useState('');
   const [invalid, setInvalid] = useState(false);
-
-  const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
+  const [changeData, setChangeData] = useState(false);
+  console.log('Datta======>>>>>>>', data, confirm, code);
+  const ref = useBlurOnFulfill({code, cellCount: CELL_COUNT});
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
-    value,
-    setValue,
+    code,
+    setCode,
   });
 
+  async function confirmCode() {
+    try {
+      await confirm.confirm(code).then(async response => {
+        console.log('[response ---->>>> ]', response);
+        const token = await messaging().getToken();
+        await firestore().collection('employee').add({uid, data, token});
+        console.log('[responseDaat fireStore ---->>>> ]', uid, data, token);
+
+        navigation.navigate('ChatPage');
+      });
+      console.log('Data=====----->>', code, confirm);
+    } catch (error) {
+      console.log('Invalid code....', error);
+      setInvalid(true);
+      navigation.navigate('ChatPage');
+    }
+  }
+
+  const dataChange = () => {
+    confirmCode();
+    setChangeData(!changeData);
+    setLoader(true);
+    setTimeout(() => {
+      setLoader(false);
+    }, 3000);
+  };
+
   return (
-    <Container>
-      <HeaderContainer>
-        <BackIcon source={require('../../assets/icons/back_icon.png')} />
-        <Spacer.Row numberOfSpaces={4} />
-        <HeaderTitle>Enter OTP Code</HeaderTitle>
-      </HeaderContainer>
-      <BottomContainer>
-        <NumberText>Code has been send to +92 11******44</NumberText>
-        <Spacer.Column numberOfSpaces={14} />
-        <CodeField
-          ref={ref}
-          {...props}
-          // Use `caretHidden={false}` when users can't paste a text value, because context menu doesn't appear
-          value={value}
-          onChangeText={setValue}
-          textInputStyle={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            flex: 1,
-          }}
-          cellCount={CELL_COUNT}
-          rootStyle={styles.codeFieldRoot}
-          keyboardType="number-pad"
-          textContentType="oneTimeCode"
-          renderCell={({index, symbol, isFocused}) => (
-            <Text
-              key={index}
-              style={[styles.cell, isFocused && styles.focusCell]}
-              onLayout={getCellOnLayoutHandler(index)}>
-              {symbol || (isFocused ? <Cursor /> : null)}
-            </Text>
-          )}
+    <>
+      <Container>
+        <HeaderContainer>
+          <Touch onPress={() => navigation.goBack()}>
+            <BackIcon source={require('../../assets/icons/back_icon.png')} />
+          </Touch>
+          <Spacer.Row numberOfSpaces={4} />
+          <HeaderTitle>Enter OTP Code</HeaderTitle>
+        </HeaderContainer>
+        <BottomContainer>
+          <NumberText>Code has been send to {data}</NumberText>
+          <Spacer.Column numberOfSpaces={14} />
+          <CodeField
+            ref={ref}
+            {...props}
+            value={code}
+            onChangeText={setCode}
+            textInputStyle={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              flex: 1,
+            }}
+            cellCount={6}
+            rootStyle={styles.codeFieldRoot}
+            keyboardType="number-pad"
+            textContentType="oneTimeCode"
+            renderCell={({index, symbol, isFocused}) => (
+              <Text
+                key={index}
+                style={[styles.cell, isFocused && styles.focusCell]}
+                onLayout={getCellOnLayoutHandler(index)}>
+                {symbol || (isFocused ? <Cursor /> : null)}
+              </Text>
+            )}
+          />
+          <Spacer.Column numberOfSpaces={6} />
+          {invalid && <InvalidAlert />}
+        </BottomContainer>
+        <BlackButton
+          title={'Verify'}
+          style={styles.Btn}
+          onPress={() => dataChange()}
         />
-        <Spacer.Column numberOfSpaces={6} />
-        <InvalidAlert />
-      </BottomContainer>
-      <BlackButton title={'Verify'} style={styles.Btn} />
-    </Container>
+      </Container>
+      {loader && (
+        <LoaderContainer style={styles.loaderContainer}>
+          <LoaderBG style={styles.loaderBG}>
+            <MaterialIndicator color={theme.colors.green} />
+          </LoaderBG>
+        </LoaderContainer>
+      )}
+    </>
   );
 };
 export default OtpScreen;
@@ -100,14 +152,14 @@ const styles = StyleSheet.create({
   root: {flex: 1, padding: 20},
   title: {fontSize: 40},
   cell: {
-    width: 70,
-    height: 70,
+    width: 40,
+    height: 40,
     fontSize: 24,
     borderWidth: 1,
     borderColor: theme.colors.black,
-    borderRadius: 20,
+    borderRadius: 10,
     textAlign: 'center',
-    paddingTop: 18,
+    paddingTop: 3,
     marginHorizontal: theme.space[2],
   },
   focusCell: {
@@ -117,5 +169,21 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     position: 'absolute',
     bottom: 20,
+  },
+  loaderContainer: {
+    flex: 1,
+    height: '100%',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    paddingVertical: 50,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  loaderBG: {
+    height: '17%',
+    width: '22%',
+    backgroundColor: theme.colors.white,
+    borderRadius: 25,
   },
 });
