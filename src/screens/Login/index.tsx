@@ -1,10 +1,18 @@
-import {StyleSheet} from 'react-native';
+import {Keyboard, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
 import styled from 'styled-components/native';
 import {theme} from '../../ui';
 import {Spacer} from '../../components/Spacer';
 import PrimaryButton from '../../components/PrimaryButton';
 import PhoneInput from 'react-native-phone-number-input';
+import auth from '@react-native-firebase/auth';
+import {MaterialIndicator} from 'react-native-indicators';
+
+interface props {
+  onPress?: () => void;
+  title?: string;
+  style?: any;
+}
 
 const Container = styled.View({
   flex: 1,
@@ -37,108 +45,61 @@ const MyNumber = styled.Text({
   fontSize: theme.fontSize.small,
   color: theme.colors.blue,
 });
+const LoaderContainer = styled.View({});
+const LoaderBG = styled.View({});
 
-// const InputView = styled.View({
-//   width: '100%',
-//   alignItems: 'center',
-//   paddingHorizontal: theme.space[8],
-// });
+const Login = ({navigation}) => {
+  const [loader, setLoader] = useState(false);
+  const [confirm, setConfirm] = useState(null);
+  const [data, setData] = useState<string>('');
 
-// const CountryView = styled.View({
-//   width: '100%',
-//   paddingVertical: 5,
-//   flexDirection: 'row',
-//   justifyContent: 'center',
-//   alignItems: 'center',
-//   borderBottomWidth: 0.5,
-//   borderBottomColor: theme.colors.primery100,
-// });
-
-// const CountryName = styled.TextInput({
-//   fontSize: theme.fontSize.mediumText,
-//   fontFamily: theme.fontFamilies.text,
-// });
-
-// const DownIcon = styled.Image({
-//   position: 'absolute',
-//   right: 10,
-// });
-
-// const NumberView = styled.View({
-//   width: '100%',
-//   flexDirection: 'row',
-// });
-
-// const CountryCode = styled.TextInput({
-//   fontSize: theme.fontSize.mediumText,
-//   fontFamily: theme.fontFamilies.text,
-//   borderBottomWidth: 1,
-//   borderBottomColor: theme.colors.primery100,
-//   paddingVertical: 3,
-//   letterSpacing: 1.5,
-//   marginTop: 5,
-//   width: '18%',
-// });
-
-// const Number = styled.TextInput({
-//   fontSize: theme.fontSize.mediumText,
-//   fontFamily: theme.fontFamilies.text,
-//   borderBottomWidth: 1,
-//   borderBottomColor: theme.colors.primery100,
-//   paddingVertical: 3,
-//   marginTop: 5,
-//   marginLeft: '5%',
-//   width: '77%',
-// });
-
-const Login = () => {
-  const [country, setCountry] = useState('Pakistan');
-  const [countryCode, setCountryCode] = useState('+ 92');
-  const [number, setNumber] = useState('');
-  const [data, setData] = useState();
+  async function signInWithPhoneNumber() {
+    const confirmation: any = await auth().signInWithPhoneNumber(data);
+    console.log('Confirmation------>>>>>', confirmation);
+    Keyboard.dismiss();
+    setLoader(true);
+    setTimeout(() => {
+      setLoader(false);
+      navigation.navigate('OtpScreen', {
+        data: data,
+        confirm: confirmation,
+      });
+    }, 3000);
+  }
 
   return (
-    <Container>
-      <TitleContainer>
-        <Title>Enter your phone number</Title>
-        <Menu>
-          <MenuImage source={require('../../assets/icons/menu_icon.png')} />
-        </Menu>
-      </TitleContainer>
-      <Spacer.Column numberOfSpaces={8} />
-      <Description>
-        WhatsApp will need to verify your phone number.
-        <MyNumber> What’s my number?</MyNumber>
-      </Description>
-      <Spacer.Column numberOfSpaces={16} />
-      <PhoneInput
-        style={{color: 'red'}}
-        onChangeFormattedText={(x: any) => setData(x)}
-      />
-      {/* <InputView>
-        <CountryView>
-          <CountryName
-            value={country}
-            onChangeText={text => setCountry(text)}
-          />
-          <DownIcon source={require('../../assets/icons/down_icon.png')} />
-        </CountryView>
-
-        <NumberView>
-          <CountryCode
-            value={countryCode}
-            onChangeText={text => setCountryCode(text)}
-            keyboardType="decimal-pad"
-          />
-          <Number
-            value={number}
-            onChangeText={text => setNumber(text)}
-            keyboardType="decimal-pad"
-          />
-        </NumberView>
-      </InputView> */}
-      <PrimaryButton title={'NEXT'} style={styles.nextBtn} />
-    </Container>
+    <>
+      <Container>
+        <TitleContainer>
+          <Title>Enter your phone number</Title>
+          <Menu>
+            <MenuImage source={require('../../assets/icons/menu_icon.png')} />
+          </Menu>
+        </TitleContainer>
+        <Spacer.Column numberOfSpaces={8} />
+        <Description>
+          WhatsApp will need to verify your phone number.
+          <MyNumber> What’s my number?</MyNumber>
+        </Description>
+        <Spacer.Column numberOfSpaces={16} />
+        <PhoneInput
+          defaultCode="PK"
+          onChangeFormattedText={(x: any) => setData(x)}
+        />
+        <PrimaryButton
+          title={'NEXT'}
+          style={styles.nextBtn}
+          onPress={() => signInWithPhoneNumber()}
+        />
+      </Container>
+      {loader && (
+        <LoaderContainer style={styles.loaderContainer}>
+          <LoaderBG style={styles.loaderBG}>
+            <MaterialIndicator color={theme.colors.green} />
+          </LoaderBG>
+        </LoaderContainer>
+      )}
+    </>
   );
 };
 
@@ -149,5 +110,21 @@ const styles = StyleSheet.create({
     width: 60,
     position: 'absolute',
     bottom: '10%',
+  },
+  loaderContainer: {
+    flex: 1,
+    height: '100%',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    paddingVertical: 50,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  loaderBG: {
+    height: '17%',
+    width: '22%',
+    backgroundColor: theme.colors.white,
+    borderRadius: 25,
   },
 });

@@ -4,8 +4,9 @@ import styled from 'styled-components/native';
 import {theme} from '../../ui';
 
 interface props {
-  title?: any;
+  title?: string;
   style?: any;
+  onPress?: void;
 }
 
 const Container = styled.TouchableOpacity({
@@ -22,9 +23,9 @@ const Title = styled.Text({
   color: theme.colors.white,
 });
 
-const BlackButton = ({title, style}) => {
+const BlackButton = ({title, style, onPress}) => {
   return (
-    <Container style={style}>
+    <Container style={style} onPress={onPress}>
       <Title>{title}</Title>
     </Container>
   );
