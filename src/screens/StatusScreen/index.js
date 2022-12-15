@@ -1,14 +1,14 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 
-const ChatPage = ({navigation}) => {
+const StatusScreen = () => {
   return (
     <View>
-      <Text onPress={() => navigation.goBack()}>ChatPage</Text>
+      <Text>StatusScreen</Text>
     </View>
   );
 };
 
-export default ChatPage;
+export default StatusScreen;
 
 const styles = StyleSheet.create({});

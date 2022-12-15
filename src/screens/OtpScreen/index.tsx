@@ -70,14 +70,12 @@ const OtpScreen = ({navigation, route}) => {
         const token = await messaging().getToken();
         await firestore().collection('employee').add({uid, data, token});
         console.log('[responseDaat fireStore ---->>>> ]', uid, data, token);
-
         navigation.navigate('ChatPage');
       });
       console.log('Data=====----->>', code, confirm);
     } catch (error) {
       console.log('Invalid code....', error);
       setInvalid(true);
-      navigation.navigate('ChatPage');
     }
   }
 
