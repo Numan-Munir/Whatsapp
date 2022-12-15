@@ -6,6 +6,7 @@ const colors = {
   black10: '#867373',
   green: '#0CCC83',
   primery100: '#00A884',
+  primery300: '#008069',
   red100: '#F16B6B',
   blue: '#0C42CC',
   red10: '#F8DADAC7',
@@ -37,6 +38,7 @@ const fontSize = {
   small: 13,
   xsmall: 12,
   text: 15,
+  xText: 16,
 };
 
 const paddings = {
