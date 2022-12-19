@@ -54,9 +54,9 @@ const Login = ({navigation}) => {
   const [data, setData] = useState<string>('');
 
   async function signInWithPhoneNumber() {
+    Keyboard.dismiss();
     const confirmation: any = await auth().signInWithPhoneNumber(data);
     console.log('Confirmation------>>>>>', confirmation);
-    Keyboard.dismiss();
     setLoader(true);
     setTimeout(() => {
       setLoader(false);

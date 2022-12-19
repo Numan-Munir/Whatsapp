@@ -6,6 +6,7 @@ import styled from 'styled-components/native';
 import {theme} from '../../ui';
 import {PermissionsAndroid} from 'react-native';
 import NumberCard from '../../components/NumberCard';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Container = styled.View({
   flex: 1,
@@ -60,6 +61,7 @@ const MenuIcon = styled.Image({
 const ChatScreen = ({navigation}) => {
   const [data, setData] = useState();
   const [modalVisible, setModalVisible] = useState(false);
+  const [list, setList] = useState([]);
 
   const requestCameraPermission = async () => {
     try {
@@ -100,13 +102,68 @@ const ChatScreen = ({navigation}) => {
 
   useEffect(() => {
     requestCameraPermission();
+    getData();
   }, []);
+
+  const selectNewNumber = async items => {
+    if (list.length === 0) {
+      list.push(items);
+      await AsyncStorage.setItem('finalData4', JSON.stringify(list));
+      setList(list);
+      console.log('list------>>>>>', list);
+    } else {
+      let filterItem = list.filter(e => e.displayName === items.displayName);
+      console.log('list------>>>>>', list);
+      if (filterItem.length === 0) {
+        list.push(items);
+        await AsyncStorage.setItem('finalData4', JSON.stringify(list));
+        setList(list);
+        console.log('list------>>>>>', list);
+      }
+    }
+  };
+  const submitDta = item => {
+    console.log('Dummy Data', item);
+    selectNewNumber(item);
+    setModalVisible(false);
+  };
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('finalData4');
+      if (value !== null) {
+        setList(JSON.parse(value));
+        console.log('value is stored------------->>>>', JSON.parse(value));
+      }
+    } catch (e) {
+      console.log('error of get----------->>>>', e);
+    }
+  };
 
   return (
     <>
       {!modalVisible ? (
         <Container>
           <RoundBtn onPress={() => setModalVisible(true)} />
+          <FlatList
+            data={list}
+            renderItem={({item}) => {
+              return (
+                <NumberCard
+                  onPress={() => {
+                    navigation.navigate('GiftedChatScreen', {
+                      name: item.displayName,
+                      xid: item.recordID,
+                    });
+                  }}
+                  title={item.displayName}
+                  number={
+                    item.phoneNumbers.length > 0 && item.phoneNumbers[0].number
+                  }
+                />
+              );
+            }}
+          />
         </Container>
       ) : (
         <Modal
@@ -144,6 +201,7 @@ const ChatScreen = ({navigation}) => {
             renderItem={({item}) => {
               return (
                 <NumberCard
+                  onPress={() => submitDta(item)}
                   title={item.displayName}
                   number={item.phoneNumbers[0]?.number}
                 />

@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, Keyboard} from 'react-native';
 import React, {useState} from 'react';
 import styled from 'styled-components/native';
 import {theme} from '../../ui';
@@ -51,7 +51,7 @@ const CELL_COUNT = 6;
 
 const OtpScreen = ({navigation, route}) => {
   const {data, confirm} = route.params;
-  let uid = auth()?.currentUser?.uid;
+
   const [loader, setLoader] = useState(false);
   const [code, setCode] = useState('');
   const [invalid, setInvalid] = useState(false);
@@ -65,13 +65,13 @@ const OtpScreen = ({navigation, route}) => {
 
   async function confirmCode() {
     try {
-      await confirm.confirm(code).then(async response => {
-        console.log('[response ---->>>> ]', response);
+      confirm.confirm(code).then(async () => {
         const token = await messaging().getToken();
-        await firestore().collection('employee').add({uid, data, token});
-        console.log('[responseDaat fireStore ---->>>> ]', uid, data, token);
-        navigation.navigate('ChatPage');
+        firestore()
+          .collection('employee')
+          .add({data, token, uid: auth()?.currentUser?.uid});
       });
+      navigation.navigate('ChatPage');
       console.log('Data=====----->>', code, confirm);
     } catch (error) {
       console.log('Invalid code....', error);
@@ -80,6 +80,7 @@ const OtpScreen = ({navigation, route}) => {
   }
 
   const dataChange = () => {
+    Keyboard.dismiss();
     confirmCode();
     setChangeData(!changeData);
     setLoader(true);
