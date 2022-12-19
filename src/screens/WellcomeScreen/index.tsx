@@ -52,7 +52,7 @@ const ConditionBtn = styled.Text({
   color: theme.colors.blue,
 });
 
-const WellcomeScreen = () => {
+const WellcomeScreen = ({navigation}) => {
   return (
     <MainContainer>
       <HeaderContainer>
@@ -71,7 +71,10 @@ const WellcomeScreen = () => {
           <ConditionBtn>Term of Condition </ConditionBtn>
         </Discreption>
         <Spacer.Column numberOfSpaces={10} />
-        <PrimaryButton title="AGREE AND CONTINUE" />
+        <PrimaryButton
+          title="AGREE AND CONTINUE"
+          onPress={() => navigation.navigate('Login')}
+        />
         <CompanyContainer>
           <FromText>from</FromText>
           <CompanyName>Facebook</CompanyName>

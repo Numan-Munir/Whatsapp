@@ -11,6 +11,7 @@ const colors = {
   blue: '#0C42CC',
   red10: '#F8DADAC7',
   red300: '#DA1414',
+  gray: '##867373',
 };
 
 const spacesFrom1 = Array.from({length: 64}, (_, i) => i + 1);
@@ -30,6 +31,7 @@ const fontWeights = {
 };
 
 const fontSize = {
+  xTitle: 35,
   title: 30,
   mediumTitle: 24,
   xmediumText: 18,
