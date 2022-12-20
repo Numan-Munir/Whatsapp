@@ -8,6 +8,7 @@ import OtpScreen from '../screens/OtpScreen';
 import ChatPage from '../screens/ChatPage';
 import SecondSplash from '../screens/SecondSplash';
 import ThirdSplash from '../screens/ThirdSplash';
+import GifftedScreen from '../screens/GifftedScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +25,7 @@ const StackNavigation = () => {
       <Stack.Screen name="ChatPage" component={ChatPage} />
       <Stack.Screen name="SecondSplash" component={SecondSplash} />
       <Stack.Screen name="ThirdSplash" component={ThirdSplash} />
+      <Stack.Screen name="GifftedScreen" component={GifftedScreen} />
     </Stack.Navigator>
   );
 };
