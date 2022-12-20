@@ -28,9 +28,9 @@ const Number = styled.Text({
   marginTop: 7,
 });
 
-const NumberCard = ({title, number}) => {
+const NumberCard = ({title, number, onPress}) => {
   return (
-    <Container>
+    <Container onPress={onPress}>
       <ProfileImage source={{uri: 'https://picsum.photos/200'}} />
       <TitleContainer>
         <Title>{title}</Title>

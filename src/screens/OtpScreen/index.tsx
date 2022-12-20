@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Keyboard, StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
 import styled from 'styled-components/native';
 import {theme} from '../../ui';
@@ -80,6 +80,7 @@ const OtpScreen = ({navigation, route}) => {
   }
 
   const dataChange = () => {
+    Keyboard.dismiss();
     confirmCode();
     setChangeData(!changeData);
     setLoader(true);

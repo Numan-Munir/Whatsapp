@@ -5,9 +5,10 @@ import StatusScreen from '../StatusScreen';
 import CallsScreen from '../CallsScreen';
 import styled from 'styled-components/native';
 import {theme} from '../../ui';
+import ChatScreenModal from '../../components/ChatScreenModal';
 
-const Container= styled.View({
-  flex:1,
+const Container = styled.View({
+  flex: 1,
 });
 const HeaderContainer = styled.View({
   height: '10%',
@@ -16,7 +17,7 @@ const HeaderContainer = styled.View({
   alignItems: 'flex-end',
   justifyContent: 'space-between',
   flexDirection: 'row',
-  paddingBottom: 5
+  paddingBottom: 5,
 });
 const TitleView = styled.View({});
 const HeaderTitle = styled.Text({
@@ -74,7 +75,7 @@ const ChatPage = ({navigation}) => {
           },
           tabBarIndicatorStyle: {
             backgroundColor: theme.colors.white,
-            height: 2.5
+            height: 2.5,
           },
         }}>
         <Tab.Screen name="Chats" component={ChatScreen} />

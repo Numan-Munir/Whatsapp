@@ -6,6 +6,9 @@ import styled from 'styled-components/native';
 import {theme} from '../../ui';
 import {PermissionsAndroid} from 'react-native';
 import NumberCard from '../../components/NumberCard';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Header from '../../components/Header';
+import ChatScreenModal from '../../components/ChatScreenModal';
 
 const Container = styled.View({
   flex: 1,
@@ -13,53 +16,11 @@ const Container = styled.View({
 const Modal = styled.Modal({
   backgroundColor: theme.colors.white,
 });
-const BackView = styled.TouchableOpacity({});
-const BackImage = styled.Image({
-  tintColor: theme.colors.white,
-});
-const HeaderTitleView = styled.View({
-  marginLeft: 20,
-});
-const HeaderContainer = styled.View({
-  height: '12%',
-  paddingHorizontal: 10,
-  backgroundColor: theme.colors.primery300,
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  flexDirection: 'row',
-});
-const TitleView = styled.View({
-  flexDirection: 'row',
-  alignItems: 'center',
-});
-const HeaderTitle = styled.Text({
-  fontFamily: theme.fontFamilies.bold,
-  fontSize: theme.fontSize.smallTitle,
-  color: theme.colors.white,
-});
-const NumberOfContact = styled.Text({
-  fontFamily: theme.fontFamilies.bold,
-  fontSize: theme.fontSize.text,
-  color: theme.colors.white,
-});
-const IconView = styled.View({
-  flexDirection: 'row',
-  alignItems: 'center',
-});
-
-const SearchView = styled.TouchableOpacity({});
-const SearchIcon = styled.Image({
-  marginRight: 20,
-  height: 20,
-});
-const MenuView = styled.TouchableOpacity({});
-const MenuIcon = styled.Image({
-  height: 20,
-});
 
 const ChatScreen = ({navigation}) => {
   const [data, setData] = useState();
   const [modalVisible, setModalVisible] = useState(false);
+  const [list, setList] = useState([]);
 
   const requestCameraPermission = async () => {
     try {
@@ -100,12 +61,58 @@ const ChatScreen = ({navigation}) => {
 
   useEffect(() => {
     requestCameraPermission();
+    getData();
   }, []);
+
+  const selectNewNumber = async items => {
+    setModalVisible(!modalVisible);
+    if (list.length === 0) {
+      list.push(items);
+      await AsyncStorage.setItem('finalData', JSON.stringify(list));
+      setList(list);
+    } else {
+      let filterItem = list.filter(e => e.displayName === items.displayName);
+      if (filterItem.length === 0) {
+        list.push(items);
+        await AsyncStorage.setItem('finalData', JSON.stringify(list));
+        setList(list);
+      }
+    }
+  };
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('finalData');
+      if (value !== null) {
+        setList(JSON.parse(value));
+        console.log('value is stored------------->>>>', JSON.parse(value));
+      }
+    } catch (e) {
+      console.log('error of get----------->>>>', e);
+    }
+  };
 
   return (
     <>
       {!modalVisible ? (
         <Container>
+          <FlatList
+            data={list}
+            renderItem={({item}) => {
+              return (
+                <NumberCard
+                  onPress={item => {
+                    navigation.navigate('GifftedScreen', {
+                      name: item.displayName,
+                      xid: item.recordID,
+                    });
+                  }}
+                  title={item.displayName}
+                  number={item.phoneNumbers[0]?.number}
+                />
+              );
+            }}
+          />
           <RoundBtn onPress={() => setModalVisible(true)} />
         </Container>
       ) : (
@@ -115,30 +122,15 @@ const ChatScreen = ({navigation}) => {
           onRequestClose={() => {
             setModalVisible(!modalVisible);
           }}>
-          <HeaderContainer>
-            <TitleView>
-              <BackView onPress={() => setModalVisible(false)}>
-                <BackImage
-                  source={require('../../assets/icons/back_icon.png')}
-                />
-              </BackView>
-              <HeaderTitleView>
-                <HeaderTitle>Whatsapp</HeaderTitle>
-                <NumberOfContact>{data.length} conatcts</NumberOfContact>
-              </HeaderTitleView>
-            </TitleView>
-
-            <IconView>
-              <SearchView>
-                <SearchIcon
-                  source={require('../../assets/icons/search_icon.png')}
-                />
-              </SearchView>
-              <MenuView>
-                <MenuIcon source={require('../../assets/icons/dot_icon.png')} />
-              </MenuView>
-            </IconView>
-          </HeaderContainer>
+          <Header
+            length={data.length}
+            onBack={() => {
+              navigation.goBack();
+              setModalVisible(false);
+            }}
+            title={'Whatsapp'}
+            desc={'contacts'}
+          />
           <FlatList
             data={data}
             renderItem={({item}) => {
@@ -146,6 +138,7 @@ const ChatScreen = ({navigation}) => {
                 <NumberCard
                   title={item.displayName}
                   number={item.phoneNumbers[0]?.number}
+                  onPress={() => selectNewNumber(item)}
                 />
               );
             }}
