@@ -68,6 +68,7 @@ const OtpScreen = ({navigation, route}) => {
       await confirm.confirm(code).then(async response => {
         console.log('[response ---->>>> ]', response);
         const token = await messaging().getToken();
+        console.log('[Token ---->>>> ]', token);
         await firestore().collection('employee').add({uid, data, token});
         console.log('[responseDaat fireStore ---->>>> ]', uid, data, token);
         navigation.navigate('ChatPage');

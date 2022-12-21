@@ -6,6 +6,7 @@ import auth from '@react-native-firebase/auth';
 import Header from '../../components/Header';
 import styled from 'styled-components/native';
 import {theme} from '../../ui';
+import axios from 'axios';
 
 const Container = styled.View({
   flex: 1,
@@ -45,9 +46,13 @@ const GifftedScreen = ({navigation, route}) => {
     });
   }, []);
 
+  {
+    console.log('Messages----->>>>', messages);
+  }
   const onSend = messageArray => {
-    const msg = messageArray[0];
     console.log('receiverId====>>>>>', xid);
+    console.log('Mesages------<<<<>>>>>', msg);
+    const msg = messageArray[0];
     const mymsg = {
       ...msg,
       sentBy: userId,
@@ -63,6 +68,52 @@ const GifftedScreen = ({navigation, route}) => {
       .collection('messages')
       .add({...mymsg, createdAt: firestore.FieldValue.serverTimestamp()});
   };
+
+  // let params = {
+  //   to: xid,
+  //   content_available: true,
+  //   priority: 0,
+  //   notification: {
+  //     title: msg.text,
+  //     text: msg.text,
+  //     badge: 1,
+  //     sound: 'default',
+  //     color: 'green',
+  //     content_available: true,
+  //     subtitle: 'Hello subTitle',
+  //     show_in_foreground: true,
+  //     show_in_background: true,
+  //   },
+  //   data: {
+  //     title: msg.text,
+  //     text: msg.text,
+  //     customId: '123456789',
+  //     alert: 'notification',
+  //     subtitle: '',
+  //     sound: 'default',
+  //     color: 'red',
+  //     content_available: false,
+  //     priority: 0,
+  //     vibrate: 500,
+  //     show_in_foreground: true,
+  //     show_in_background: false,
+  //   },
+  // };
+
+  // axios
+  //   .post('https://fcm.googleapis.com/fcm/send', params, {
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       Authorization:
+  //         'key=AAAA_ESd9Rs:APA91bEdKPFLRKCENOjjcyEhKlIz6lBIjnJxzr-BD1FG9cRUWQqDqcJdKygIjf9d5XaRjlvZrITZnuZMAn2j78HcNlrRgq9BsKTVvN49tyFR3--Mo7OSOi3C2tdtT-e1u6pIS43Kuxj2',
+  //     },
+  //   })
+  //   .then(data => {
+  //     console.log('[data ---->>>> ]', data);
+  //   })
+  //   .catch(error => {
+  //     console.log('[error ---->>>>]', error);
+  //   });
 
   return (
     <Container>

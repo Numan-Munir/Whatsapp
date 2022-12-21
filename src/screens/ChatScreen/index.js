@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList} from 'react-native-gesture-handler';
+import {FlatList} from 'react-native';
 import Contacts from 'react-native-contacts';
 import RoundBtn from '../../components/RoundBtn';
 import styled from 'styled-components/native';
@@ -92,6 +92,12 @@ const ChatScreen = ({navigation}) => {
     }
   };
 
+  const handlePress = item => {
+    navigation.navigate('GifftedScreen', {
+      name: item.displayName,
+      xid: item.recordID,
+    });
+  };
   return (
     <>
       {!modalVisible ? (
@@ -101,11 +107,8 @@ const ChatScreen = ({navigation}) => {
             renderItem={({item}) => {
               return (
                 <NumberCard
-                  onPress={item => {
-                    navigation.navigate('GifftedScreen', {
-                      name: item.displayName,
-                      xid: item.recordID,
-                    });
+                  onPress={() => {
+                    handlePress(item);
                   }}
                   title={item.displayName}
                   number={item.phoneNumbers[0]?.number}
