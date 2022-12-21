@@ -22,10 +22,8 @@ const StackNavigation = () => {
       <Stack.Screen name="Signup" component={Signup} />
       <Stack.Screen name="WellcomeScreen" component={WellcomeScreen} />
       <Stack.Screen name="OtpScreen" component={OtpScreen} />
-      <Stack.Screen name="ChatPage" component={ChatPage} />
       <Stack.Screen name="SecondSplash" component={SecondSplash} />
       <Stack.Screen name="ThirdSplash" component={ThirdSplash} />
-      <Stack.Screen name="GifftedScreen" component={GifftedScreen} />
     </Stack.Navigator>
   );
 };

@@ -42,12 +42,34 @@ const SearchIcon = styled.Image({
   marginRight: 20,
   height: 20,
 });
+const PhoneIcon = styled.Image({
+  marginRight: 20,
+  height: 24,
+  width: 17,
+});
+const VideoIcon = styled.Image({
+  marginRight: 20,
+  height: 22,
+  width: 22,
+});
 const MenuView = styled.TouchableOpacity({});
 const MenuIcon = styled.Image({
   height: 20,
 });
 
-const Header = ({length, onMenuPress, onSearchPress, onBack, title, desc}) => {
+const Header = ({
+  length,
+  onMenuPress,
+  onSearchPress,
+  onBack,
+  title,
+  desc,
+  search,
+  video,
+  phone,
+  onVideo,
+  onPhone,
+}) => {
   return (
     <HeaderContainer>
       <TitleView>
@@ -63,9 +85,23 @@ const Header = ({length, onMenuPress, onSearchPress, onBack, title, desc}) => {
       </TitleView>
 
       <IconView>
-        <SearchView onPress={onSearchPress}>
-          <SearchIcon source={require('../../assets/icons/search_icon.png')} />
-        </SearchView>
+        {search && (
+          <SearchView onPress={onSearchPress}>
+            <SearchIcon
+              source={require('../../assets/icons/search_icon.png')}
+            />
+          </SearchView>
+        )}
+        {video && (
+          <SearchView onPress={onVideo}>
+            <VideoIcon source={require('../../assets/icons/video.png')} />
+          </SearchView>
+        )}
+        {phone && (
+          <SearchView onPress={onPhone}>
+            <PhoneIcon source={require('../../assets/icons/phone.png')} />
+          </SearchView>
+        )}
         <MenuView onPress={onMenuPress}>
           <MenuIcon source={require('../../assets/icons/dot_icon.png')} />
         </MenuView>

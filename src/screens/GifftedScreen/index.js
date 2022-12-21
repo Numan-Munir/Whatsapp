@@ -7,6 +7,7 @@ import Header from '../../components/Header';
 import styled from 'styled-components/native';
 import {theme} from '../../ui';
 import axios from 'axios';
+import ShortModal from '../../components/ShortModal';
 
 const Container = styled.View({
   flex: 1,
@@ -117,7 +118,20 @@ const GifftedScreen = ({navigation, route}) => {
 
   return (
     <Container>
-      <Header title={name} desc={'online'} onBack={() => navigation.goBack()} />
+      <ShortModal />
+      <Header
+        title={name}
+        desc={'online'}
+        onBack={() => navigation.goBack()}
+        phone={true}
+        video={true}
+        onPhone={() => {
+          console.log('Phone is Pressed');
+        }}
+        onVideo={() => {
+          console.log('Video is Pressed');
+        }}
+      />
       <GiftedChat
         messages={messages}
         placeholder="Type here"

@@ -94,7 +94,7 @@ const ChatScreen = ({navigation}) => {
 
   const handlePress = item => {
     navigation.navigate('GifftedScreen', {
-      name: item.displayName,
+      name: item.givenName,
       xid: item.recordID,
     });
   };
