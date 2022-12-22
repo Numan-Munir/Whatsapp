@@ -51,7 +51,6 @@ const CELL_COUNT = 6;
 
 const OtpScreen = ({navigation, route}) => {
   const {data, confirm} = route.params;
-  // let uid = auth()?.currentUser?.uid;
   const [loader, setLoader] = useState(false);
   const [code, setCode] = useState('');
   const [invalid, setInvalid] = useState(false);
@@ -66,9 +65,9 @@ const OtpScreen = ({navigation, route}) => {
   async function confirmCode() {
     try {
       await confirm.confirm(code).then(async response => {
-        // console.log('[response ---->>>> ]', response);
+        console.log('[response ---->>>> ]', response);
         const token = await messaging().getToken();
-        // console.log('[response ---->>>> ]', token);
+        console.log('[response ---->>>> ]', token);
 
         firestore()
           .collection('AuthUser')

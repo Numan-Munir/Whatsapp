@@ -7,14 +7,6 @@ import PrimaryButton from '../../components/PrimaryButton';
 import PhoneInput from 'react-native-phone-number-input';
 import auth from '@react-native-firebase/auth';
 import {MaterialIndicator} from 'react-native-indicators';
-import firestore from '@react-native-firebase/firestore';
-import messaging from '@react-native-firebase/messaging';
-
-// interface props {
-//   onPress?: () => void;
-//   title?: string;
-//   style?: any;
-// }
 
 const Container = styled.View({
   flex: 1,
@@ -67,22 +59,6 @@ const Login = ({navigation}) => {
       });
     }, 3000);
   }
-
-  // const signInWithPhoneNumber = async data => {
-  //   try {
-  //     const confirmation = await auth().signInWithPhoneNumber(data);
-  //     // storeData(confirmation._verificationId)
-  //     const token = await messaging().getToken();
-  //     console.log('--------------------------->>>>>', token);
-
-  //     firestore()
-  //       .collection('users')
-  //       .add({uid: auth().currentUser.uid, token, data});
-  //     setIsConfirm(confirmation);
-  //   } catch (error) {
-  //     alert(error);
-  //   }
-  // };
 
   return (
     <>
@@ -142,74 +118,3 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
 });
-
-// import {View, Text, TouchableOpacity} from 'react-native';
-// import React, {useState} from 'react';
-// import PhoneInput from 'react-native-phone-number-input';
-// import auth from '@react-native-firebase/auth';
-// import firestore from '@react-native-firebase/firestore';
-// import messaging from '@react-native-firebase/messaging';
-
-// const Login = ({navigation}) => {
-//   const [data, setData] = useState('');
-//   // const [confirm, setConfirm] = useState('');
-//   // console.log('===============>>>>>', confirm);
-
-//   async function signInWithPhoneNumber() {
-//     // Keyboard.dismiss();
-//     try {
-//       const confirmation = await auth().signInWithPhoneNumber(data);
-//       console.log('Confirmation------>>>>>', confirmation);
-//       const token = await messaging().getToken();
-//       console.log('token------>>>>>', token);
-
-//       firestore().collection('users').add({token, data});
-//       // setLoader(true);
-//       setTimeout(() => {
-//         // setLoader(false);
-//         navigation.navigate('OtpScreen', {
-//           data: data,
-//           confirm: confirmation,
-//         });
-//       }, 3000);
-//     } catch (error) {
-//       alert(error);
-//     }
-//   }
-//   // const signInWithPhoneNumber = async data => {
-//   //   try {
-//   //     const confirmation = await auth().signInWithPhoneNumber(data);
-//   //     // storeData(confirmation._verificationId)
-//   //     const token = await messaging().getToken();
-//   //     console.log('--------------------------->>>>>', token);
-
-//   //     firestore().collection('users').add({token, data});
-//   //     setConfirm(confirmation);
-//   //   } catch (error) {
-//   //     alert(error);
-//   //   }
-//   // };
-
-//   return (
-//     <>
-//       <TouchableOpacity
-//         onPress={() => signInWithPhoneNumber(data)}
-//         style={{
-//           height: 50,
-//           width: 120,
-//           backgroundColor: 'grey',
-//           alignSelf: 'center',
-//           alignItems: 'center',
-//         }}>
-//         <Text>index</Text>
-//       </TouchableOpacity>
-//       <PhoneInput
-//         value={data}
-//         defaultCode="PK"
-//         onChangeFormattedText={x => setData(x)}
-//       />
-//     </>
-//   );
-// };
-
-// export default Login;
