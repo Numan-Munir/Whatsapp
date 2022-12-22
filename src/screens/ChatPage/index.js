@@ -5,7 +5,6 @@ import StatusScreen from '../StatusScreen';
 import CallsScreen from '../CallsScreen';
 import styled from 'styled-components/native';
 import {theme} from '../../ui';
-import ChatScreenModal from '../../components/ChatScreenModal';
 
 const Container = styled.View({
   flex: 1,
@@ -72,7 +71,6 @@ const ChatPage = ({navigation, route}) => {
           tabBarLabelStyle: {
             color: theme.colors.white,
             fontFamily: theme.fontFamilies.bold,
-            // textTransform: 'uppercase',
           },
           tabBarStyle: {
             backgroundColor: theme.colors.primery300,

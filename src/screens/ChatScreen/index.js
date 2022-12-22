@@ -8,7 +8,6 @@ import {PermissionsAndroid} from 'react-native';
 import NumberCard from '../../components/NumberCard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Header from '../../components/Header';
-import ChatScreenModal from '../../components/ChatScreenModal';
 import firestore from '@react-native-firebase/firestore';
 
 const Container = styled.View({
@@ -77,7 +76,7 @@ const ChatScreen = ({navigation}) => {
   useEffect(() => {
     requestCameraPermission();
     userData();
-    getData();
+    // getData();
   }, []);
 
   const selectNewNumber = async items => {
@@ -96,17 +95,17 @@ const ChatScreen = ({navigation}) => {
     }
   };
 
-  const getData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('finalData');
-      if (value !== null) {
-        setList(JSON.parse(value));
-        console.log('value is stored------------->>>>', JSON.parse(value));
-      }
-    } catch (e) {
-      console.log('error of get----------->>>>', e);
-    }
-  };
+  // const getData = async () => {
+  //   try {
+  //     const value = await AsyncStorage.getItem('finalData');
+  //     if (value !== null) {
+  //       setList(JSON.parse(value));
+  //       console.log('value is stored------------->>>>', JSON.parse(value));
+  //     }
+  //   } catch (e) {
+  //     console.log('error of get----------->>>>', e);
+  //   }
+  // };
 
   const handlePress = item => {
     navigation.navigate('GifftedScreen', {

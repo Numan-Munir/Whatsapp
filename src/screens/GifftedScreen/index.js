@@ -1,4 +1,3 @@
-import {StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {GiftedChat} from 'react-native-gifted-chat';
 import firestore from '@react-native-firebase/firestore';
@@ -7,7 +6,6 @@ import Header from '../../components/Header';
 import styled from 'styled-components/native';
 import {theme} from '../../ui';
 import axios from 'axios';
-import ShortModal from '../../components/ShortModal';
 
 const Container = styled.View({
   flex: 1,
@@ -148,7 +146,7 @@ const GifftedScreen = ({navigation, route}) => {
           console.log('Phone is Pressed');
         }}
         onVideo={() => {
-          console.log('Video is Pressed');
+          navigation.navigate('VideoCalling');
         }}
       />
       <GiftedChat
@@ -164,5 +162,3 @@ const GifftedScreen = ({navigation, route}) => {
 };
 
 export default GifftedScreen;
-
-const styles = StyleSheet.create({});
