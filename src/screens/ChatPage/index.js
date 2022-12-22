@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import ChatScreen from '../ChatScreen';
 import StatusScreen from '../StatusScreen';
@@ -42,7 +42,11 @@ const MenuIcon = styled.Image({
 
 const Tab = createMaterialTopTabNavigator();
 
-const ChatPage = ({navigation}) => {
+const ChatPage = ({navigation, route}) => {
+  const userToken = route?.params?.token;
+  console.log('Chat Page Token---->>>', userToken);
+  const [data, setData] = useState('');
+
   return (
     <Container>
       <HeaderContainer>

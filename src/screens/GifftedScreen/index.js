@@ -14,12 +14,15 @@ const Container = styled.View({
 });
 
 const GifftedScreen = ({navigation, route}) => {
-  const {xid, name} = route.params;
-  console.log('Name is here---=-=-==--=>>>>', name, xid);
+  const {xid} = route.params;
+  const [messages, setMessages] = useState([]);
+  const [users, setUsers] = useState('');
 
   const userId = auth().currentUser.uid;
+  const token = users[0]?.token;
 
-  const [messages, setMessages] = useState([]);
+  console.log('.............................>>', users[0]?.token, xid);
+
   useEffect(() => {
     const docid = xid > userId ? userId + '-' + xid : xid + '-' + userId;
     const messageRef = firestore()
@@ -47,6 +50,22 @@ const GifftedScreen = ({navigation, route}) => {
     });
   }, []);
 
+  useEffect(() => {
+    GetUser();
+  }, []);
+
+  const GetUser = () => {
+    firestore()
+      .collection('AuthUser')
+      .onSnapshot(snapshot => {
+        let arr = [];
+        snapshot.forEach(user => {
+          arr.push(user.data());
+        });
+        setUsers(arr);
+      });
+  };
+
   {
     console.log('Messages----->>>>', messages);
   }
@@ -71,7 +90,7 @@ const GifftedScreen = ({navigation, route}) => {
   };
 
   // let params = {
-  //   to: xid,
+  //   to: token,
   //   content_available: true,
   //   priority: 0,
   //   notification: {
@@ -118,9 +137,9 @@ const GifftedScreen = ({navigation, route}) => {
 
   return (
     <Container>
-      <ShortModal />
+      {/* <ShortModal /> */}
       <Header
-        title={name}
+        // title={name}
         desc={'online'}
         onBack={() => navigation.goBack()}
         phone={true}

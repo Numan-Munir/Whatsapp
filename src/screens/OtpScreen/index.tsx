@@ -51,7 +51,7 @@ const CELL_COUNT = 6;
 
 const OtpScreen = ({navigation, route}) => {
   const {data, confirm} = route.params;
-  let uid = auth()?.currentUser?.uid;
+  // let uid = auth()?.currentUser?.uid;
   const [loader, setLoader] = useState(false);
   const [code, setCode] = useState('');
   const [invalid, setInvalid] = useState(false);
@@ -66,12 +66,25 @@ const OtpScreen = ({navigation, route}) => {
   async function confirmCode() {
     try {
       await confirm.confirm(code).then(async response => {
-        console.log('[response ---->>>> ]', response);
+        // console.log('[response ---->>>> ]', response);
         const token = await messaging().getToken();
-        console.log('[Token ---->>>> ]', token);
-        await firestore().collection('employee').add({uid, data, token});
-        console.log('[responseDaat fireStore ---->>>> ]', uid, data, token);
-        navigation.navigate('ChatPage');
+        // console.log('[response ---->>>> ]', token);
+
+        firestore()
+          .collection('AuthUser')
+          .add({token, data, uid: auth()?.currentUser?.uid})
+          .then(
+            navigation.navigate('ChatPage', {
+              token,
+              data: data,
+            }),
+          );
+        console.log(
+          '[responseDaat fireStore ---->>>> ]',
+          (uid = auth()?.currentUser?.uid),
+          data,
+          token,
+        );
       });
       console.log('Data=====----->>', code, confirm);
     } catch (error) {

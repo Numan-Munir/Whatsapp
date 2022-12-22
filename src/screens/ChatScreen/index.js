@@ -9,6 +9,7 @@ import NumberCard from '../../components/NumberCard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Header from '../../components/Header';
 import ChatScreenModal from '../../components/ChatScreenModal';
+import firestore from '@react-native-firebase/firestore';
 
 const Container = styled.View({
   flex: 1,
@@ -21,6 +22,7 @@ const ChatScreen = ({navigation}) => {
   const [data, setData] = useState();
   const [modalVisible, setModalVisible] = useState(false);
   const [list, setList] = useState([]);
+  const [AuthData, setAuthData] = useState();
 
   const requestCameraPermission = async () => {
     try {
@@ -59,8 +61,22 @@ const ChatScreen = ({navigation}) => {
     }
   };
 
+  const userData = () => {
+    let arr = [];
+    firestore()
+      .collection('AuthUser')
+      .onSnapshot(documentSnapshot => {
+        documentSnapshot.forEach(x => {
+          arr.push({...x.data()});
+        });
+        setAuthData(arr);
+        console.log('Length of data', arr.length);
+      });
+  };
+
   useEffect(() => {
     requestCameraPermission();
+    userData();
     getData();
   }, []);
 
@@ -94,8 +110,7 @@ const ChatScreen = ({navigation}) => {
 
   const handlePress = item => {
     navigation.navigate('GifftedScreen', {
-      name: item.givenName,
-      xid: item.recordID,
+      xid: item.uid,
     });
   };
   return (
@@ -103,15 +118,14 @@ const ChatScreen = ({navigation}) => {
       {!modalVisible ? (
         <Container>
           <FlatList
-            data={list}
+            data={AuthData}
             renderItem={({item}) => {
               return (
                 <NumberCard
                   onPress={() => {
                     handlePress(item);
                   }}
-                  title={item.displayName}
-                  number={item.phoneNumbers[0]?.number}
+                  title={item.data}
                 />
               );
             }}
@@ -141,7 +155,9 @@ const ChatScreen = ({navigation}) => {
                 <NumberCard
                   title={item.displayName}
                   number={item.phoneNumbers[0]?.number}
-                  onPress={() => selectNewNumber(item)}
+                  onPress={() => {
+                    selectNewNumber();
+                  }}
                 />
               );
             }}
