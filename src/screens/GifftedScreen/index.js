@@ -143,7 +143,7 @@ const GifftedScreen = ({navigation, route}) => {
         phone={true}
         video={true}
         onPhone={() => {
-          console.log('Phone is Pressed');
+          navigation.navigate('AudioCalling');
         }}
         onVideo={() => {
           navigation.navigate('VideoCalling');

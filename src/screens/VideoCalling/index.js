@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   Platform,
@@ -11,7 +11,6 @@ import {
   PermissionsAndroid,
   Image,
 } from 'react-native';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import RtcEngine, {
   VideoRenderMode,
   RtcLocalView,
@@ -38,7 +37,6 @@ const VideoCalling = () => {
     isRinging: false,
   });
 
-  const isDarkMode = useColorScheme() === 'dark';
   const backgroundStyle = {
     flex: 1,
     backgroundColor: '#1D262B',
@@ -47,7 +45,7 @@ const VideoCalling = () => {
   useEffect(() => {
     initializeSDK();
     requestCameraAndAudioPermission();
-    console.log('============>>', engine);
+    // console.log('============>>', engine);
   }, []);
   //   useEffect(() => {
   //     console.log('.....................>>', engine);
@@ -79,11 +77,16 @@ const VideoCalling = () => {
     setEngine(engine);
     // console.log('[engineRef ---->>>>>>>>>>>>>>>>>>> ', engine);
     // Enable the audio module.
-    // let audioEnabled = await engine.enableAudio();
+    let audioEnabled = await engine.enableAudio();
     let videoEnabled = await engine.enableVideo();
 
     let isSpeaker = await engine.isSpeakerphoneEnabled();
-    // console.log('[isSpeakerEnable ---->>> ]', isSpeaker, audioEnabled);
+    console.log(
+      '[isSpeakerEnable ---->>> ]',
+      isSpeaker,
+      audioEnabled,
+      videoEnabled,
+    );
 
     // This callback occurs when the remote user successfully joins the channel.
     engine.addListener('UserJoined', (uid, elapsed) => {
@@ -163,7 +166,6 @@ const VideoCalling = () => {
         style={{
           flex: 1,
           paddingTop: 30,
-          // justifyContent: 'center',
           alignItems: 'center',
           paddingHorizontal: 50,
         }}>
@@ -233,7 +235,7 @@ const VideoCalling = () => {
             source={require('../../assets/icons/phone.png')}
           />
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() =>
             setCallStatus({
               cancelCall: true,
@@ -261,25 +263,56 @@ const VideoCalling = () => {
             }}
             source={require('../../assets/icons/phone.png')}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
-      <View style={{flex: 1, flexDirection: 'row'}}>
-        {joinSucceed && (
-          <RtcLocalView.SurfaceView
-            style={{flex: 1, backgroundColor: 'red'}}
-            channelId={channel}
-            VideoRenderMode={VideoRenderMode.Hidden}
-          />
-        )}
-        {uid && (
-          <RtcRemoteView.SurfaceView
-            style={{flex: 1, backgroundColor: 'red'}}
-            uid={uid}
-            channelId={channel}
-            VideoRenderMode={VideoRenderMode.Hidden}
-          />
-        )}
-      </View>
+      {callStatus.isRinging && (
+        <View style={{flex: 1, flexDirection: 'row'}}>
+          {joinSucceed && (
+            <RtcLocalView.SurfaceView
+              style={{flex: 1, backgroundColor: 'red'}}
+              channelId={channel}
+              VideoRenderMode={VideoRenderMode.Hidden}
+            />
+          )}
+          {uid && (
+            <RtcRemoteView.SurfaceView
+              style={{flex: 1, backgroundColor: 'red'}}
+              uid={uid}
+              channelId={channel}
+              VideoRenderMode={VideoRenderMode.Hidden}
+            />
+          )}
+          <TouchableOpacity
+            onPress={() =>
+              setCallStatus({
+                cancelCall: true,
+                startCall: false,
+                isRinging: false,
+              })
+            }
+            style={{
+              height: 60,
+              width: 60,
+              alignSelf: 'center',
+              borderRadius: 50,
+              backgroundColor: 'red',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginBottom: 80,
+            }}>
+            <Image
+              style={{
+                height: 29,
+                width: 20,
+                marginVertical: 5,
+                marginHorizontal: 20,
+                resizeMode: 'contain',
+              }}
+              source={require('../../assets/icons/phone.png')}
+            />
+          </TouchableOpacity>
+        </View>
+      )}
     </SafeAreaView>
   );
 };

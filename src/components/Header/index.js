@@ -11,7 +11,7 @@ const HeaderTitleView = styled.View({
   marginLeft: 20,
 });
 const HeaderContainer = styled.View({
-  height: '12%',
+  height: 70,
   paddingHorizontal: 10,
   backgroundColor: theme.colors.primery300,
   alignItems: 'center',
