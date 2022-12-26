@@ -15,10 +15,10 @@ import {theme} from '../../ui';
 
 const appId = '5aa2033d9c434c8fba88701b06b936d5';
 const agora_token =
-  '007eJxTYFh9RGuf3op58ntmbp/qbtZ+Rz/xsq1R7fS16fJ/O0Lu7OxWYDBNTDQyMDZOsUw2MTZJtkhLSrSwMDcwTDIwS7I0NksxrdRaktwQyMiwdNImBkYoBPEFGRxLUzLzwzJTUvOdE3NyMvPSGRgAVq0lOA==';
+  '007eJxTYBDyXOsYtNKkSaP9nIXzZo5AiXc2V4wWfxQ4l76v2PPOy+8KDIaGSeapqUmpJqkWqSaWlgZJacmWBoYGJkaWacZJRqaGrgErkxsCGRkst29hZWSAQBBfkMGxNCUzPywzJTXfOTEnJzMvnYEBAM/CI/s=';
 const channel = 'AudioVideoCalling';
 
-const AudioCalling = () => {
+const AudioCalling = ({navigation}) => {
   const [joinSucceed, setJoinSucceed] = useState(false);
   const [uid, setUid] = useState();
   const [engine, setEngine] = useState();
@@ -99,6 +99,7 @@ const AudioCalling = () => {
       });
       resetStates();
       setJoinSucceed(true);
+      navigation.goBack();
       console.log('[User-leave-call-receiver]', Platform.OS, reason);
     });
 
@@ -153,6 +154,13 @@ const AudioCalling = () => {
       });
     }, 1500);
   };
+
+  const CallDropped = async () => {
+    let engine = await (await RtcEngine.create(appId)).leaveChannel();
+    console.log('disableAudio', engine);
+    navigation.goBack();
+  };
+
   return (
     <SafeAreaView style={backgroundStyle}>
       <View
@@ -229,13 +237,7 @@ const AudioCalling = () => {
           />
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() =>
-            setCallStatus({
-              cancelCall: true,
-              startCall: false,
-              isRinging: false,
-            })
-          }
+          onPress={() => CallDropped()}
           style={{
             height: 60,
             width: 60,

@@ -2,11 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   Platform,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
-  useColorScheme,
   View,
   PermissionsAndroid,
   Image,
@@ -15,16 +13,15 @@ import RtcEngine, {
   VideoRenderMode,
   RtcLocalView,
   RtcRemoteView,
-  ChannelProfile,
 } from 'react-native-agora';
 import {theme} from '../../ui';
 
 const appId = '11b7eebe4e8e4990bfc9010429f3b251';
 const agora_token =
-  '007eJxTYDD7tNCOQ2HtJRnrg+rBCo+rsqtfaj5U+HFS3uB1tq3L/2sKDIaGSeapqUmpJqkWqSaWlgZJacmWBoYGJkaWacZJRqaGZ3WXJDcEMjIo/JzBwsgAgSC+IINjaUpmflhmSmq+c2JOTmZeOgMDAP7RJIQ=';
+  '007eJxTYBDyXOsYtNKkSaP9nIXzZo5AiXc2V4wWfxQ4l76v2PPOy+8KDIaGSeapqUmpJqkWqSaWlgZJacmWBoYGJkaWacZJRqaGrgErkxsCGRkst29hZWSAQBBfkMGxNCUzPywzJTXfOTEnJzMvnYEBAM/CI/s=';
 const channel = 'AudioVideoCalling';
 
-const VideoCalling = () => {
+const VideoCalling = ({navigation}) => {
   const [joinSucceed, setJoinSucceed] = useState(false);
   const [uid, setUid] = useState();
   const [engine, setEngine] = useState();
@@ -107,6 +104,7 @@ const VideoCalling = () => {
       });
       resetStates();
       setJoinSucceed(true);
+      navigation.goBack();
       console.log('[User-leave-call-receiver]', Platform.OS, reason);
     });
     // This callback occurs when the local user successfully joins the channel.
@@ -160,6 +158,13 @@ const VideoCalling = () => {
       });
     }, 1500);
   };
+
+  const CallDropped = async () => {
+    let engine = await (await RtcEngine.create(appId)).leaveChannel();
+    console.log('disableAudio', engine);
+    navigation.goBack();
+  };
+
   return (
     <SafeAreaView style={backgroundStyle}>
       <View
@@ -235,14 +240,8 @@ const VideoCalling = () => {
             source={require('../../assets/icons/phone.png')}
           />
         </TouchableOpacity>
-        {/* <TouchableOpacity
-          onPress={() =>
-            setCallStatus({
-              cancelCall: true,
-              startCall: false,
-              isRinging: false,
-            })
-          }
+        <TouchableOpacity
+          onPress={() => CallDropped()}
           style={{
             height: 60,
             width: 60,
@@ -263,56 +262,28 @@ const VideoCalling = () => {
             }}
             source={require('../../assets/icons/phone.png')}
           />
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
-      {callStatus.isRinging && (
-        <View style={{flex: 1, flexDirection: 'row'}}>
-          {joinSucceed && (
-            <RtcLocalView.SurfaceView
-              style={{flex: 1, backgroundColor: 'red'}}
-              channelId={channel}
-              VideoRenderMode={VideoRenderMode.Hidden}
-            />
-          )}
-          {uid && (
-            <RtcRemoteView.SurfaceView
-              style={{flex: 1, backgroundColor: 'red'}}
-              uid={uid}
-              channelId={channel}
-              VideoRenderMode={VideoRenderMode.Hidden}
-            />
-          )}
-          <TouchableOpacity
-            onPress={() =>
-              setCallStatus({
-                cancelCall: true,
-                startCall: false,
-                isRinging: false,
-              })
-            }
-            style={{
-              height: 60,
-              width: 60,
-              alignSelf: 'center',
-              borderRadius: 50,
-              backgroundColor: 'red',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginBottom: 80,
-            }}>
-            <Image
-              style={{
-                height: 29,
-                width: 20,
-                marginVertical: 5,
-                marginHorizontal: 20,
-                resizeMode: 'contain',
-              }}
-              source={require('../../assets/icons/phone.png')}
-            />
-          </TouchableOpacity>
-        </View>
-      )}
+      {callStatus.isRinging ||
+        (callStatus.startCall && (
+          <View style={{flex: 1, flexDirection: 'row'}}>
+            {joinSucceed && (
+              <RtcLocalView.SurfaceView
+                style={{flex: 1, backgroundColor: 'red'}}
+                channelId={channel}
+                VideoRenderMode={VideoRenderMode.Hidden}
+              />
+            )}
+            {uid && (
+              <RtcRemoteView.SurfaceView
+                style={{flex: 1, backgroundColor: 'red'}}
+                uid={uid}
+                channelId={channel}
+                VideoRenderMode={VideoRenderMode.Hidden}
+              />
+            )}
+          </View>
+        ))}
     </SafeAreaView>
   );
 };
