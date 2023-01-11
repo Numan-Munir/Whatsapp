@@ -21,7 +21,7 @@ const Title = styled.Text({
   fontSize: theme.fontSize.xsmall,
 });
 
-const PrimaryButton = ({onPress, title, style}) => {
+const PrimaryButton: React.FC<props> = ({onPress, title, style}) => {
   return (
     <Container onPress={onPress} style={style}>
       <Title>{title}</Title>

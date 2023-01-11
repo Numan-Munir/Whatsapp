@@ -12,7 +12,17 @@ import GifftedScreen from '../screens/GifftedScreen';
 
 const Stack = createNativeStackNavigator();
 
-const StackNavigation = () => {
+export type StackNav = {
+  SplashScreen: undefined;
+  Login: undefined;
+  Signup: undefined;
+  WellcomeScreen: undefined;
+  OtpScreen: undefined;
+  SecondSplash: undefined;
+  ThirdSplash: undefined;
+};
+
+const StackNavigation: React.FC<StackNav> = () => {
   return (
     <Stack.Navigator
       initialRouteName="Login"
